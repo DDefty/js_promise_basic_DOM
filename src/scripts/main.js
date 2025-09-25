@@ -19,18 +19,18 @@ function showError(text) {
 }
 
 const promise1 = new Promise((resolve) => {
-  if (logo) {
-    logo.addEventListener('click', () => resolve('Promise was resolved!'), {
-      once: true,
-    });
+  if (!logo) {
+    return;
   }
+
+  logo.addEventListener('click', () => resolve('Promise was resolved!'), {
+    once: true,
+  });
 });
 
 const promise2 = new Promise((resolve, reject) => {
-  setTimeout(() => {
-    setTimeout(() => reject(new Error('Promise was rejected!')), 3000);
-  }, 0);
+  setTimeout(() => reject(new Error('Promise was rejected!')), 3000);
 });
 
-promise1.then(showMessage).catch((err) => showError(err.message));
-promise2.then(showMessage).catch((err) => showError(err.message));
+promise1.then(showMessage).catch(() => showError('Promise was rejected!'));
+promise2.then(showMessage).catch(() => showError('Promise was rejected!'));
